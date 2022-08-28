@@ -44,38 +44,25 @@ class Bar < ActiveMethod::Base
   end
 end
 
-class Foo
-  def bar(*args)
-    Bar.call(*args)
-  end
-
-  # Or
-
-  # def bar(a, b = 2, c:, d: 4)
-  #   Bar.call(a, b, c: c, d: d)
-  # end
-end
-
-
-Foo.new.bar(1)
+Bar.call(1)
 # =>  a: 1
 # =>  b: 2
 # =>  c: nil
 # =>  d: 4
 
-Foo.new.bar(1, 3)
+Bar.call(1, 3)
 # =>  a: 1
 # =>  b: 3
 # =>  c: nil
 # =>  d: 4
 
-Foo.new.bar(1, 3, c: 6)
+Bar.call(1, 3, c: 6)
 # =>  a: 1
 # =>  b: 3
 # =>  c: 6
 # =>  d: 4
 
-Foo.new.bar(1, 3, c: 4, d: 5)
+Bar.call(1, 3, c: 4, d: 5)
 # =>  a: 1
 # =>  b: 3
 # =>  c: 4
