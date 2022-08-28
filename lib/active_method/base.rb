@@ -24,15 +24,18 @@ module ActiveMethod
         class_variable_get(:@@keyword_arguments)
       end
 
-      private
+      def inherited(subclass)
+        subclass.init_arguments
+        subclass.init_keyword_arguments
+      end
+
+      protected
 
       def method_missing(method_name, *args)
         case method_name.to_s
         when /^argument(_\d)*$/
-          init_arguments
           parse_argument(method_name, *args)
         when 'keyword_argument'
-          init_keyword_arguments
           parse_keyword_argument(*args)
         else
           super
