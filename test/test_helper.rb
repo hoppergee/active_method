@@ -11,3 +11,17 @@ require "active_method"
 
 require "minitest/autorun"
 require "debug"
+
+class ApplicationTest < Minitest::Spec
+
+  def klass(class_name, parent=Object, &block)
+    klass = Class.new(parent)
+    klass.class_exec(&block)
+    self.class.const_set class_name, klass
+  end
+
+  def remove_klass(klass)
+    self.class.send(:remove_const, klass)
+  end
+
+end
