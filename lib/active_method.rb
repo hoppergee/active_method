@@ -3,6 +3,5 @@
 require_relative "active_method/version"
 
 module ActiveMethod
-  class Error < StandardError; end
-  # Your code goes here...
+  autoload :Base, "active_method/base"
 end
