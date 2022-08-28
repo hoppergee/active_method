@@ -14,8 +14,23 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
+Refactor `Foo#bar` to `Bar` with `ActiveMethod`
+
 ```ruby
-class ExampleMethod < ActiveMethod::Base
+class Foo
+  def bar(a, b, c: , d:)
+    puts "a: #{a}"
+    puts "b: #{b}"
+    puts "c: #{c}"
+    puts "d: #{d}"
+  end
+end
+```
+
+Refactor to:
+
+```ruby
+class Bar < ActiveMethod::Base
   argument :a
   argument :b, default: 2
   keyword_argument :c
@@ -29,25 +44,38 @@ class ExampleMethod < ActiveMethod::Base
   end
 end
 
-ExampleMethod.call(1)
+class Foo
+  def bar(*args)
+    Bar.call(*args)
+  end
+
+  # Or
+
+  # def bar(a, b = 2, c:, d: 4)
+  #   Bar.call(a, b, c: c, d: d)
+  # end
+end
+
+
+Foo.new.bar(1)
 # =>  a: 1
 # =>  b: 2
 # =>  c: nil
 # =>  d: 4
 
-ExampleMethod.call(1, 3)
+Foo.new.bar(1, 3)
 # =>  a: 1
 # =>  b: 3
 # =>  c: nil
 # =>  d: 4
 
-ExampleMethod.call(1, 3, c: 6)
+Foo.new.bar(1, 3, c: 6)
 # =>  a: 1
 # =>  b: 3
 # =>  c: 6
 # =>  d: 4
 
-ExampleMethod.call(1, 3, c: 4, d: 5)
+Foo.new.bar(1, 3, c: 4, d: 5)
 # =>  a: 1
 # =>  b: 3
 # =>  c: 4
