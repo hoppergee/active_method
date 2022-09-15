@@ -99,6 +99,15 @@ module ActiveMethod
     def call
     end
 
+    def __set_owner(owner)
+      @__method_owner = owner
+
+      instance_name = Util.snake_case(owner.class.name.split("::").last)
+      self.class.define_method instance_name do
+        @__method_owner
+      end
+    end
+
     private
 
     def arguments
