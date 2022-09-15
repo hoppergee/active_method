@@ -23,6 +23,12 @@ class Foo
     puts "b: #{b}"
     puts "c: #{c}"
     puts "d: #{d}"
+
+    buzz
+  end
+
+  def buzs
+    puts 'buzz'
   end
 end
 ```
@@ -41,7 +47,15 @@ class Bar < ActiveMethod::Base
     puts "b: #{b}"
     puts "c: #{c}"
     puts "d: #{d}"
+
+    foo.buzz
   end
+end
+
+class Foo
+  include ActiveMethod
+
+  active_method :bar
 end
 
 Bar.call(1)
@@ -49,24 +63,28 @@ Bar.call(1)
 # =>  b: 2
 # =>  c: nil
 # =>  d: 4
+# =>  buzz
 
 Bar.call(1, 3)
 # =>  a: 1
 # =>  b: 3
 # =>  c: nil
 # =>  d: 4
+# =>  buzz
 
 Bar.call(1, 3, c: 6)
 # =>  a: 1
 # =>  b: 3
 # =>  c: 6
 # =>  d: 4
+# =>  buzz
 
 Bar.call(1, 3, c: 4, d: 5)
 # =>  a: 1
 # =>  b: 3
 # =>  c: 4
 # =>  d: 5
+# =>  buzz
 ```
 
 ## Development
