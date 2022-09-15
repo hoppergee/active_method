@@ -12,6 +12,11 @@ module ActiveMethod
 
     class << self
 
+      def [](owner)
+        Executor.new(self, owner)
+      end
+      alias_method :on, :[]
+
       def call(*args)
         new(*args).call
       end
@@ -96,9 +101,6 @@ module ActiveMethod
       end
     end
 
-    def call
-    end
-
     def __set_owner(owner)
       @__method_owner = owner
 
@@ -106,6 +108,9 @@ module ActiveMethod
       self.class.define_method instance_name do
         @__method_owner
       end
+    end
+
+    def call
     end
 
     private
