@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- Support `module_function`
+
 ## [1.0.0] - 2022-09-16
 
 - Now you can use `.active_method` through `include ActiveMethod`

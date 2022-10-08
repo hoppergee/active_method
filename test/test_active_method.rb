@@ -55,4 +55,54 @@ class TestActiveMethod < ApplicationTest
     assert_equal ['a', 'b', 'c', 'd', 'x', 'y', 'z'], Example::FooBar.new.baz('a', 'b', c: 'c', d: 'd')
   end
 
+  ################
+  # .active_method for module
+  ################
+
+  class Hi < ActiveMethod::Base
+    argument :name
+
+    def call
+      "Hi, #{name}"
+    end
+  end
+
+  class Bye < ActiveMethod::Base
+    argument :name
+
+    def call
+      "Bye, #{name}"
+    end
+  end
+
+  module Say
+    include ActiveMethod
+
+    active_method :hi
+    active_method :bye, module_function: true
+  end
+
+  class Person
+    include Say
+  end
+
+  class Dog
+    include ActiveMethod
+  end
+
+  it ".acive_method - works on module" do
+    assert_equal "Hi, John", Person.new.hi("John")
+  end
+
+  it ".acive_method - works as a module_function" do
+    assert_equal "Bye, John", Say.bye("John")
+  end
+
+  it ".acive_method - raise error for a class when pass module_functin: true" do
+    error = assert_raises NoMethodError do
+      Dog.active_method(:hi, module_function: true)
+    end
+    assert_includes error.message, "undefined method `module_function'"
+  end
+
 end

@@ -12,11 +12,15 @@ module ActiveMethod
   end
 
   module ClassMethods
-    def active_method(name, method_class = nil)
+    def active_method(name, method_class = nil, **options)
       method_class ||= Util.constantize self, Util.camel_case(name)
 
       define_method name do |*args|
         method_class[self].call(*args)
+      end
+
+      if options[:module_function]
+        module_function name
       end
     end
   end
