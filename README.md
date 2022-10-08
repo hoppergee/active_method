@@ -87,6 +87,27 @@ Bar.call(1, 3, c: 4, d: 5)
 # =>  buzz
 ```
 
+### Work on module
+
+```ruby
+class Hi < ActiveMethod::Base
+  argument :name
+
+  def call
+    "Hi, #{name}"
+  end
+end
+
+module Say
+  include ActiveMethod
+
+  active_method :hi, module_function: true
+end
+
+Say.hi('John')
+# => "Hi, John"
+```
+
 ## Development
 
 ```bash

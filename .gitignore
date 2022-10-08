@@ -9,3 +9,4 @@
 .matrixeval/docker-compose
 .matrixeval/gemfile_locks
 .byebug_history
+Gemfile.lock
