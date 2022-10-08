@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [1.1.0] - 2022-10-08
+
 - Support `module_function`
 
 ## [1.0.0] - 2022-09-16
