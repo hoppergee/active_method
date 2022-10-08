@@ -105,7 +105,7 @@ module ActiveMethod
       @__method_owner = owner
 
       instance_name = Util.snake_case(owner.class.name.split("::").last)
-      self.class.define_method instance_name do
+      self.define_singleton_method instance_name do
         @__method_owner
       end
     end
