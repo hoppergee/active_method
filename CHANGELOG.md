@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [1.2.1] - 2022-11-21
+
+- Build on main branch
 ## [1.2.0] - 2022-11-21
 
 - Support `class_method`
