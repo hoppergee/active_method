@@ -104,7 +104,8 @@ module ActiveMethod
     def __set_owner(owner)
       @__method_owner = owner
 
-      instance_name = Util.snake_case(owner.class.name.split("::").last)
+      klass = owner.is_a?(Class) ? owner : owner.class
+      instance_name = Util.snake_case(klass.name.split("::").last)
       self.define_singleton_method instance_name do
         @__method_owner
       end

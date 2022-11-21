@@ -105,4 +105,33 @@ class TestActiveMethod < ApplicationTest
     assert_includes error.message, "undefined method `module_function'"
   end
 
+  ################
+  # .active_method for class method
+  ################
+
+  class BuildARobot < ActiveMethod::Base
+    argument :name
+
+    def call
+      "#{robot_factory} build a robot called #{name}"
+    end
+  end
+
+  class RobotFactory
+    include ActiveMethod
+
+    active_method :build_a_robot, class_method: true
+  end
+
+  it ".acive_method - works as a class method" do
+    assert_equal "TestActiveMethod::RobotFactory build a robot called B-2", RobotFactory.build_a_robot("B-2")
+  end
+
+  it ".acive_method - won't works as a instance method" do
+    error = assert_raises NoMethodError do
+      RobotFactory.new.build_a_robot("B-2")
+    end
+    assert_includes error.message, "undefined method `build_a_robot'"
+  end
+
 end

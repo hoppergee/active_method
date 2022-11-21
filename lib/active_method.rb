@@ -15,13 +15,21 @@ module ActiveMethod
     def active_method(name, method_class = nil, **options)
       method_class ||= Util.constantize self, Util.camel_case(name)
 
-      define_method name do |*args|
-        method_class[self].call(*args)
+      if options[:class_method]
+        define_singleton_method name do |*args|
+          method_class[self].call(*args)
+        end
+
+      else
+        define_method name do |*args|
+          method_class[self].call(*args)
+        end
+
+        if options[:module_function]
+          module_function name
+        end
       end
 
-      if options[:module_function]
-        module_function name
-      end
     end
   end
 end

@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [1.2.0] - 2022-11-21
+
+- Support `class_method`
+
 ## [1.1.1] - 2022-10-08
 
 - Change owner method define from `self.calss.define_method` to `self.define_singleton_method`
