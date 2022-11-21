@@ -108,6 +108,27 @@ Say.hi('John')
 # => "Hi, John"
 ```
 
+### Work as a class method
+
+```ruby
+class BuildARobot < ActiveMethod::Base
+  argument :name
+
+  def call
+    "#{robot_factory} build a robot called #{name}"
+  end
+end
+
+class RobotFactory
+  include ActiveMethod
+
+  active_method :build_a_robot, class_method: true
+end
+
+RobotFactory.build_a_robot
+# => "RobotFactory build a robot called B-2"
+```
+
 ## Development
 
 ```bash
