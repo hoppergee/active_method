@@ -1,132 +1,76 @@
 # ActiveMethod
 
-Refactor your obscure method to a method object with `ActiveMethod`
+Method is an object in Ruby, but we need **a real method object**. Welcome to `ActiveMethod`!
+
+- **Clean scope** without module
+- **High maintainability** with tiny method objects
+- Make wrting OO **easy**, then writing OO **everywhere**
+
+![](./hero.png)
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+```bash
+$ bundle add active_method
+```
 
-    $ bundle add active_method
+## API
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+**It just do what a method do, and nothing else!**
 
-    $ gem install active_method
-
-## Usage
-
-Refactor `Foo#bar` to `Bar` with `ActiveMethod`
+### Define method object
 
 ```ruby
-class Foo
-  def bar(a, b, c: , d:)
-    puts "a: #{a}"
-    puts "b: #{b}"
-    puts "c: #{c}"
-    puts "d: #{d}"
+class User
+  include ActiveMethod
 
-    buzz
-  end
+  active_method :foo
+  active_method :bar, MyBar
+  active_method :build_one, class_method: true
+end
 
-  def buzs
-    puts 'buzz'
-  end
+module Util
+  active_method :parse_url, module_function: true
 end
 ```
 
-Refactor to:
+### Declaring arguments
 
 ```ruby
-class Bar < ActiveMethod::Base
+class Foo < ActiveMethod::Base
   argument :a
   argument :b, default: 2
   keyword_argument :c
   keyword_argument :d, default: 4
 
   def call
-    puts "a: #{a}"
-    puts "b: #{b}"
-    puts "c: #{c}"
-    puts "d: #{d}"
-
-    foo.buzz
+    puts "a: #{a}, b: #{b}, c: #{c}, d: #{d}"
   end
 end
 
-class Foo
-  include ActiveMethod
-
-  active_method :bar
-end
-
-Bar.call(1)
-# =>  a: 1
-# =>  b: 2
-# =>  c: nil
-# =>  d: 4
-# =>  buzz
-
-Bar.call(1, 3)
-# =>  a: 1
-# =>  b: 3
-# =>  c: nil
-# =>  d: 4
-# =>  buzz
-
-Bar.call(1, 3, c: 6)
-# =>  a: 1
-# =>  b: 3
-# =>  c: 6
-# =>  d: 4
-# =>  buzz
-
-Bar.call(1, 3, c: 4, d: 5)
-# =>  a: 1
-# =>  b: 3
-# =>  c: 4
-# =>  d: 5
-# =>  buzz
+User.new.foo('aa', 3, c: 'cc', d: 5)
+#=> a: aa, b: 3, c: cc, d: 5
 ```
 
-### Work on module
+### Get the owner of the method
 
 ```ruby
+class User
+  include ActiveMethod
+  attr_accessor :name
+  active_method :hi
+end
+
 class Hi < ActiveMethod::Base
-  argument :name
-
   def call
-    "Hi, #{name}"
+    puts "Hi, I'm #{user.name}"
   end
 end
 
-module Say
-  include ActiveMethod
-
-  active_method :hi, module_function: true
-end
-
-Say.hi('John')
-# => "Hi, John"
-```
-
-### Work as a class method
-
-```ruby
-class BuildARobot < ActiveMethod::Base
-  argument :name
-
-  def call
-    "#{robot_factory} build a robot called #{name}"
-  end
-end
-
-class RobotFactory
-  include ActiveMethod
-
-  active_method :build_a_robot, class_method: true
-end
-
-RobotFactory.build_a_robot
-# => "RobotFactory build a robot called B-2"
+user = User.new
+user.name = 'ActiveMethod'
+user.hi
+#=> Hi, I'm ActiveMethod
 ```
 
 ## Development
