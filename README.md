@@ -58,19 +58,21 @@ User.new.foo('aa', 3, c: 'cc', d: 5)
 class User
   include ActiveMethod
   attr_accessor :name
+  attr_accessor :fromal_name
   active_method :hi
 end
 
 class Hi < ActiveMethod::Base
   def call
-    puts "Hi, I'm #{user.name}"
+    puts "Hi, I'm a #{@__method_owner.fromal_name}. Please call me #{user.name}"
   end
 end
 
 user = User.new
 user.name = 'ActiveMethod'
+user.fromal_name = 'method object'
 user.hi
-#=> Hi, I'm ActiveMethod
+#=> Hi, I'm a method objectc, please call me ActiveMethod
 ```
 
 ## Development
