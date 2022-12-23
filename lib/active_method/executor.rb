@@ -8,10 +8,10 @@ module ActiveMethod
       @owner = owner
     end
 
-    def call(*args)
+    def call(*args, &block)
       method = method_class.new(*args)
       method.__set_owner(owner)
-      method.call
+      method.call(&block)
     end
 
   end

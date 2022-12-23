@@ -17,8 +17,8 @@ module ActiveMethod
       end
       alias_method :on, :[]
 
-      def call(*args)
-        new(*args).call
+      def call(*args, &block)
+        new(*args).call(&block)
       end
 
       def arguments

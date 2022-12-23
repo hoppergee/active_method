@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [1.3.0] - 2022-12-23
+
+- Support &block
+
 ## [1.2.1] - 2022-11-21
 
 - Build on main branch
