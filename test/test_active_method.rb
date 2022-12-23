@@ -134,4 +134,97 @@ class TestActiveMethod < ApplicationTest
     assert_includes error.message, "undefined method `build_a_robot'"
   end
 
+  ################
+  # .active_method with &block
+  ################
+
+  class SetInstanceConfig < ActiveMethod::Base
+
+    def call
+      yield instance_configuration
+    end
+
+  end
+
+  class InstanceConfiguration
+    include ActiveMethod
+
+    attr_accessor :a
+    attr_accessor :b
+
+    active_method :config, SetInstanceConfig
+  end
+
+  it ".active_method work as a instance method with a block" do
+    configuration = InstanceConfiguration.new
+    configuration.config do |config|
+      config.a = 'aaa'
+      config.b = 'bbb'
+    end
+    assert_equal 'aaa', configuration.a
+    assert_equal 'bbb', configuration.b
+  end
+
+  class SetModuleConfig < ActiveMethod::Base
+
+    def call
+      yield @__method_owner
+    end
+
+  end
+
+  module ModuleConfiguration
+    include ActiveMethod
+
+    module_function
+
+    def a
+      @a
+    end
+
+    def a=(value)
+      @a = value
+    end
+
+    active_method :config, SetModuleConfig, module_function: true
+  end
+
+  it ".active_method work as a module method with a block" do
+    ModuleConfiguration.config do |config|
+      config.a = 'aaa'
+    end
+    assert_equal 'aaa', ModuleConfiguration.a
+  end
+
+  class SetClassConfig < ActiveMethod::Base
+
+    def call
+      yield class_configuration
+    end
+
+  end
+
+  class ClassConfiguration
+    include ActiveMethod
+
+    class << self
+      def a
+        @@a
+      end
+
+      def a=(value)
+        @@a = value
+      end
+    end
+
+    active_method :config, SetClassConfig, class_method: true
+  end
+
+  it ".active_method work as a instance method with a block" do
+    ClassConfiguration.config do |config|
+      config.a = 'aaa'
+    end
+    assert_equal 'aaa', ClassConfiguration.a
+  end
+
 end

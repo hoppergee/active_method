@@ -16,13 +16,13 @@ module ActiveMethod
       method_class ||= Util.constantize self, Util.camel_case(name)
 
       if options[:class_method]
-        define_singleton_method name do |*args|
-          method_class[self].call(*args)
+        define_singleton_method name do |*args, &block|
+          method_class[self].call(*args, &block)
         end
 
       else
-        define_method name do |*args|
-          method_class[self].call(*args)
+        define_method name do |*args, &block|
+          method_class[self].call(*args, &block)
         end
 
         if options[:module_function]
