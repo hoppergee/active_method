@@ -52,7 +52,7 @@ User.new.foo('aa', 3, c: 'cc', d: 5)
 #=> a: aa, b: 3, c: cc, d: 5
 ```
 
-### Get the owner of the method
+### Customize the owner name of the method
 
 ```ruby
 class User
@@ -63,8 +63,10 @@ class User
 end
 
 class Hi < ActiveMethod::Base
+  onwer :support
+
   def call
-    puts "Hi, I'm a #{@__method_owner.fromal_name}. Please call me #{user.name}"
+    puts "Hi, I'm a #{support.fromal_name}. Please call me #{user.name}"
   end
 end
 

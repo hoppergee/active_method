@@ -18,9 +18,15 @@ matrix:
         container:
           image: ruby:3.0.4
       - key: 3.1
-        default: true
         container:
           image: ruby:3.1.2
+      - key: 3.2
+        container:
+          image: ruby:3.2.4
+      - key: 3.3
+        default: true
+        container:
+          image: ruby:3.3.4
       # - key: jruby-9.3
       #   container:
       #     image: jruby:9.3

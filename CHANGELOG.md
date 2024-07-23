@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [1.4.0] - 2024-06-23
+
+- Support customize method owner name
+
 ## [1.3.0] - 2022-12-23
 
 - Support &block
