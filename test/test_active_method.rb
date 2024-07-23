@@ -227,4 +227,38 @@ class TestActiveMethod < ApplicationTest
     assert_equal 'aaa', ClassConfiguration.a
   end
 
+  ################
+  # .active_method customize owner name
+  ################
+
+  class PowerOff < ActiveMethod::Base
+    owner :machine
+
+    def call
+      machine.off = true
+    end
+  end
+
+  class Desktop
+    include ActiveMethod
+    active_method :power_off
+    attr_accessor :off
+  end
+
+  class Laptop
+    include ActiveMethod
+    active_method :power_off
+    attr_accessor :off
+  end
+
+  it ".active_method can customize owenr name for sharing to work like a concern" do
+    desktop = Desktop.new
+    desktop.power_off
+    assert desktop.off
+
+    laptop = Laptop.new
+    laptop.power_off
+    assert laptop.off
+  end
+
 end

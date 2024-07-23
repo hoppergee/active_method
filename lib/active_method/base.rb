@@ -29,9 +29,14 @@ module ActiveMethod
         class_variable_get(:@@keyword_arguments)
       end
 
+      def owner_name
+        class_variable_get(:@@owner_name)
+      end
+
       def inherited(subclass)
         subclass.init_arguments
         subclass.init_keyword_arguments
+        subclass.init_owner_name
       end
 
       protected
@@ -42,6 +47,8 @@ module ActiveMethod
           parse_argument(method_name, *args)
         when 'keyword_argument'
           parse_keyword_argument(*args)
+        when 'owner'
+          parse_method_owner(*args)
         else
           super
         end
@@ -67,6 +74,10 @@ module ActiveMethod
         end
       end
 
+      def parse_method_owner(name)
+        class_variable_set(:@@owner_name, name)
+      end
+
       def init_arguments
         return if self.class_variable_defined?(:@@arguments)
 
@@ -77,6 +88,12 @@ module ActiveMethod
         return if self.class_variable_defined?(:@@keyword_arguments)
 
         self.class_variable_set(:@@keyword_arguments, [])
+      end
+
+      def init_owner_name
+        return if self.class_variable_defined?(:@@owner_name)
+
+        self.class_variable_set(:@@owner_name, nil)
       end
     end
 
@@ -104,9 +121,13 @@ module ActiveMethod
     def __set_owner(owner)
       @__method_owner = owner
 
-      klass = owner.is_a?(Class) ? owner : owner.class
-      instance_name = Util.snake_case(klass.name.split("::").last)
-      self.define_singleton_method instance_name do
+      @__owner_name = self.class.owner_name
+      if @__owner_name.nil?
+        klass = owner.is_a?(Class) ? owner : owner.class
+        @__owner_name = Util.snake_case(klass.name.split("::").last)
+      end
+
+      self.define_singleton_method @__owner_name do
         @__method_owner
       end
     end
