@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [1.5.0] - 2024-12-18
+
+- Support inheritance 
+
 ## [1.4.0] - 2024-06-23
 
 - Support customize method owner name
