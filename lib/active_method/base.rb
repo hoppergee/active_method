@@ -22,21 +22,17 @@ module ActiveMethod
       end
 
       def arguments
-        class_variable_get(:@@arguments)
+        @arguments ||= {}
       end
 
       def keyword_arguments
-        class_variable_get(:@@keyword_arguments)
+        @keyword_arguments ||= []
       end
 
       def owner_name
-        class_variable_get(:@@owner_name)
-      end
-
-      def inherited(subclass)
-        subclass.init_arguments
-        subclass.init_keyword_arguments
-        subclass.init_owner_name
+        return @owner_name unless @owner_name.nil?
+        return if self == ActiveMethod::Base
+        superclass.owner_name
       end
 
       protected
@@ -75,26 +71,9 @@ module ActiveMethod
       end
 
       def parse_method_owner(name)
-        class_variable_set(:@@owner_name, name)
+        @owner_name = name
       end
 
-      def init_arguments
-        return if self.class_variable_defined?(:@@arguments)
-
-        self.class_variable_set(:@@arguments, {})
-      end
-
-      def init_keyword_arguments
-        return if self.class_variable_defined?(:@@keyword_arguments)
-
-        self.class_variable_set(:@@keyword_arguments, [])
-      end
-
-      def init_owner_name
-        return if self.class_variable_defined?(:@@owner_name)
-
-        self.class_variable_set(:@@owner_name, nil)
-      end
     end
 
     def initialize(*args)

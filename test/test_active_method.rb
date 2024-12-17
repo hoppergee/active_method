@@ -261,4 +261,51 @@ class TestActiveMethod < ApplicationTest
     assert laptop.off
   end
 
+  ################
+  # .active_method with inheritance 
+  ################
+
+  class DemoAPIBase < ActiveMethod::Base
+    owner :client
+  end
+
+  class GetA < DemoAPIBase
+    argument :id
+
+    def call
+      puts "Request GET: /a"
+    end
+  end
+
+  class GetB < DemoAPIBase
+    keyword_argument :first
+    keyword_argument :per
+
+    def call
+      puts "Request GET: /b"
+    end
+  end
+
+  class Client
+    include ActiveMethod
+    active_method :get_a
+    active_method :get_b
+  end
+
+  it ".active_method can orgianize with a Base methd" do
+    get_a_arguments = GetA.arguments.values
+    assert_equal 1, get_a_arguments.count
+    assert_equal :id, get_a_arguments[0].name
+    get_a_keyword_arguments = GetA.keyword_arguments
+    assert_equal 0, get_a_keyword_arguments.count
+    assert_equal :client, GetA.owner_name
+
+    get_b_arguments = GetB.arguments.values
+    assert_equal 0, get_b_arguments.count
+    get_b_keyword_arguments = GetB.keyword_arguments
+    assert_equal :first, get_b_keyword_arguments[0].name
+    assert_equal :per, get_b_keyword_arguments[1].name
+    assert_equal :client, GetB.owner_name
+  end
+
 end
